@@ -14,6 +14,7 @@
   top: 0;
   left: 0;
   right: 0;
+  height: 4.25rem;
   z-index: 100;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -25,21 +26,40 @@
 }
 
 .headerSolid {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 4px 20px -10px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 20px -10px rgba(15, 23, 42, 0.03);
+  position: fixed;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e2e8f0;
+    transition: left 0.3s ease;
+  }
+
+  &.hasSidebar::after {
+    left: 270px; /* Removes border line over top of sidebar (0..270px) */
+    @media (max-width: 1024px) {
+      left: 0;
+    }
+  }
 }
 
 .headerContent {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 1.25rem 2rem;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  padding: 0 2rem;
   @include flex-between;
 
   @media (max-width: 640px) {
-    padding: 1rem 1.25rem;
+    padding: 0 1.25rem;
   }
 }
 
@@ -55,15 +75,17 @@
 
 .logoTitle {
   font-family: $font-display;
-  font-size: 1.875rem;
+  font-size: 2.25rem;
   line-height: 1;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.015em;
   font-weight: 400;
   transition: color 0.3s ease;
 
   sup {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     vertical-align: super;
+    font-weight: 400;
+    margin-left: 1px;
   }
 }
 
@@ -170,8 +192,7 @@
 
 .mainContent {
   flex: 1;
-  max-width: 80rem;
   width: 100%;
-  margin: 0 auto;
-  padding: 5.5rem 1.5rem 5rem;
+  margin: 0;
+  padding: 4.25rem 0 0 0;
 }

@@ -18,6 +18,7 @@ import {
   Lightbulb,
   Flag,
   X,
+  Mic,
 } from 'lucide-react';
 import styles from '@/styles/InterviewView.module.scss';
 
@@ -52,7 +53,87 @@ export default function InterviewView({
   const [wordCount, setWordCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Voice-to-text Dictation States
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordTime, setRecordTime] = useState(0);
+  const recognitionRef = useRef<any>(null);
+  const timerRef = useRef<any>(null);
+
   const QUESTION_LIMIT = 6;
+
+  // Format record timer (mm:ss)
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const startRecording = () => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert('Speech recognition is not supported in your current browser. Please use Chrome, Edge, or Safari.');
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event: any) => {
+        let transcript = '';
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript + ' ';
+        }
+        if (transcript.trim()) {
+          handleAnswerChange(transcript.trim());
+        }
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+      };
+
+      recognition.start();
+      recognitionRef.current = recognition;
+      setIsRecording(true);
+      setRecordTime(0);
+
+      timerRef.current = setInterval(() => {
+        setRecordTime((prev) => prev + 1);
+      }, 1000);
+    } catch (e) {
+      console.error('Could not start speech recognition:', e);
+    }
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {}
+      recognitionRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {}
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const used = exchanges
@@ -244,16 +325,53 @@ export default function InterviewView({
               rows={6}
             />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className={styles.actionRow}>
             <span style={{ fontSize: '0.8rem', color: '#64748b' }}>{wordCount} words</span>
-            <button
-              onClick={handleSubmit}
-              disabled={answer.trim().length < 5}
-              className={styles.submitBtn}
-            >
-              <Send size={16} />
-              Submit answer
-            </button>
+            
+            <div className={styles.rightActions}>
+              {isRecording ? (
+                <div
+                  className={styles.activeVoiceCapsule}
+                  onClick={stopRecording}
+                  title="Click to stop voice dictation"
+                >
+                  <div className={styles.capsuleLeft}>
+                    <Mic size={18} className={styles.greenMicIcon} />
+                    <span className={styles.capsuleTimer}>{formatTime(recordTime)}</span>
+                  </div>
+                  <div className={styles.equalizerWave}>
+                    <span className={styles.bar1} />
+                    <span className={styles.bar2} />
+                    <span className={styles.bar3} />
+                    <span className={styles.bar4} />
+                    <span className={styles.bar5} />
+                    <span className={styles.bar6} />
+                    <span className={styles.bar7} />
+                    <span className={styles.bar8} />
+                    <span className={styles.bar9} />
+                    <span className={styles.bar10} />
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className={styles.micToggleBtn}
+                  onClick={startRecording}
+                  title="Voice-to-Text Dictation (Click to Speak)"
+                >
+                  <Mic size={18} />
+                </button>
+              )}
+
+              <button
+                onClick={handleSubmit}
+                disabled={answer.trim().length < 5 || isRecording}
+                className={styles.submitBtn}
+              >
+                <Send size={16} />
+                Submit answer
+              </button>
+            </div>
           </div>
         </div>
       )}

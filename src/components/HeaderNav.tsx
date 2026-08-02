@@ -68,6 +68,7 @@ export default function HeaderNav() {
 
   // On home page at top, render transparent overlay navbar
   const isTransparent = pathname === '/' && !scrolled;
+  const hasSidebar = pathname === '/practice';
 
   return (
     <>
@@ -78,11 +79,11 @@ export default function HeaderNav() {
       />
 
       <header
-        className={`${styles.header} ${isTransparent ? styles.headerTransparent : styles.headerSolid}`}
+        className={`${styles.header} ${isTransparent ? styles.headerTransparent : styles.headerSolid} ${hasSidebar ? styles.hasSidebar : ''}`}
       >
         <div className={styles.headerContent}>
           <Link href="/" className={styles.logoBtn}>
-            <Image src="/logo.svg" alt="Interview Coach Logo" width={34} height={34} style={{ borderRadius: '8px' }} />
+            <Image src="/logo.svg" alt="Interview Coach Logo" width={42} height={42} style={{ borderRadius: '8px' }} />
             <span className={`${styles.logoTitle} ${isTransparent ? styles.textWhite : styles.textNavy}`}>
               Interview Coach<sup>®</sup>
             </span>
