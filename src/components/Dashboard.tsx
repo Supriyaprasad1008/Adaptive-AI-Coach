@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   supabase,
   type InterviewSession,
-  type SessionWithExchanges,
   FOCUS_AREAS,
   ROLES,
   type Difficulty,
@@ -16,10 +15,8 @@ import {
   Brain,
   TrendingUp,
   Trophy,
-  Clock,
   ChevronRight,
   Target,
-  Sparkles,
   BarChart3,
   Play,
   Calendar,
@@ -82,52 +79,7 @@ export default function Dashboard({ onStartSession, onViewReport, refreshKey }: 
 
   return (
     <div className={styles.container}>
-      <section className={styles.heroBanner}>
-        <div className={styles.badge}>
-          <Sparkles size={14} />
-          Adaptive AI-powered coaching
-        </div>
-        <h1 className={styles.heroTitle}>
-          Master your interviews with a coach that adapts to you
-        </h1>
-        <p className={styles.heroDesc}>
-          Practice realistic mock interviews where question difficulty rises and falls
-          based on the quality of your answers. Track your growth across sessions with
-          detailed performance reports.
-        </p>
-      </section>
-
-      {stats && (
-        <section className={styles.statsGrid}>
-          <StatCard
-            icon={<BarChart3 size={20} />}
-            label="Sessions completed"
-            value={String(stats.total)}
-            tone="blue"
-          />
-          <StatCard
-            icon={<TrendingUp size={20} />}
-            label="Average score"
-            value={`${stats.avg}`}
-            suffix="/100"
-            tone="teal"
-          />
-          <StatCard
-            icon={<Trophy size={20} />}
-            label="Best score"
-            value={`${stats.best}`}
-            suffix="/100"
-            tone="amber"
-          />
-          <StatCard
-            icon={<Target size={20} />}
-            label="Latest trend"
-            value={stats.trend > 0 ? `+${stats.trend}` : stats.trend === 0 ? '0' : `${stats.trend}`}
-            tone={stats.trend >= 0 ? 'green' : 'rose'}
-          />
-        </section>
-      )}
-
+      {/* Session Setup Form */}
       <section className={styles.configSection}>
         <div className={styles.sectionHeader}>
           <div className={styles.sectionIcon}>
@@ -164,7 +116,7 @@ export default function Dashboard({ onStartSession, onViewReport, refreshKey }: 
                 <option key={f.value} value={f.value}>{f.label}</option>
               ))}
             </select>
-            <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>
+            <span style={{ fontSize: '0.75rem', color: '#a1a1aa', marginTop: '4px' }}>
               {focusAreaMeta.description} - {questionCount} questions
             </span>
           </div>
@@ -194,6 +146,39 @@ export default function Dashboard({ onStartSession, onViewReport, refreshKey }: 
         </button>
       </section>
 
+      {/* Analytics Stats Overview */}
+      {stats && (
+        <section className={styles.statsGrid}>
+          <StatCard
+            icon={<BarChart3 size={20} />}
+            label="Sessions completed"
+            value={String(stats.total)}
+            tone="blue"
+          />
+          <StatCard
+            icon={<TrendingUp size={20} />}
+            label="Average score"
+            value={`${stats.avg}`}
+            suffix="/100"
+            tone="teal"
+          />
+          <StatCard
+            icon={<Trophy size={20} />}
+            label="Best score"
+            value={`${stats.best}`}
+            suffix="/100"
+            tone="amber"
+          />
+          <StatCard
+            icon={<Target size={20} />}
+            label="Latest trend"
+            value={stats.trend > 0 ? `+${stats.trend}` : stats.trend === 0 ? '0' : `${stats.trend}`}
+            tone={stats.trend >= 0 ? 'green' : 'rose'}
+          />
+        </section>
+      )}
+
+      {/* Recent Sessions List */}
       <section className={styles.sessionsSection}>
         <div className={styles.sessionsHeader}>
           <h2>Recent sessions</h2>
@@ -201,14 +186,14 @@ export default function Dashboard({ onStartSession, onViewReport, refreshKey }: 
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '48px', color: '#94a3b8' }}>
+          <div style={{ textAlign: 'center', padding: '48px', color: '#a1a1aa' }}>
             Loading sessions...
           </div>
         ) : sessions.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '48px', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '16px' }}>
-            <Calendar size={32} style={{ color: '#64748b', margin: '0 auto 12px' }} />
-            <p style={{ color: '#f8fafc', fontWeight: 600 }}>No sessions yet</p>
-            <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '4px' }}>Complete your first mock interview to see it here.</p>
+          <div style={{ textAlign: 'center', padding: '48px', border: '1px dashed rgba(255,255,255,0.15)', borderRadius: '16px', background: 'rgba(4, 25, 43, 0.4)' }}>
+            <Calendar size={32} style={{ color: '#71717a', margin: '0 auto 12px' }} />
+            <p style={{ color: '#ffffff', fontWeight: 600 }}>No sessions yet</p>
+            <p style={{ color: '#a1a1aa', fontSize: '0.85rem', marginTop: '4px' }}>Complete your first mock interview to see it here.</p>
           </div>
         ) : (
           <div className={styles.sessionsGrid}>
@@ -226,7 +211,7 @@ function StatCard({
   icon,
   label,
   value,
-  suffix,
+  suffix = '',
   tone,
 }: {
   icon: React.ReactNode;
@@ -237,51 +222,48 @@ function StatCard({
 }) {
   return (
     <div className={styles.statCard}>
-      <div className={`${styles.statIcon} ${styles[tone]}`}>
-        {icon}
-      </div>
-      <p className={styles.statValue}>
+      <div className={`${styles.statIcon} ${styles[tone]}`}>{icon}</div>
+      <div className={styles.statValue}>
         {value}
         {suffix && <span>{suffix}</span>}
-      </p>
-      <p className={styles.statLabel}>{label}</p>
+      </div>
+      <div className={styles.statLabel}>{label}</div>
     </div>
   );
 }
 
-function SessionCard({ session, onViewReport }: { session: InterviewSession; onViewReport: (id: string) => void }) {
-  const score = session.overall_score;
-  const tier = score !== null ? scoreTier(score) : null;
-  const date = new Date(session.started_at);
+function SessionCard({
+  session,
+  onViewReport,
+}: {
+  session: InterviewSession;
+  onViewReport: (id: string) => void;
+}) {
   const isComplete = session.status === 'completed';
-
-  const tierKey = tier ? tier.label.toLowerCase().replace(/\s+/g, '') : '';
+  const tier = isComplete && session.overall_score !== null ? scoreTier(session.overall_score) : null;
+  const date = new Date(session.started_at);
 
   return (
     <button onClick={() => onViewReport(session.id)} className={styles.sessionCard}>
       <div>
-        <div className={styles.sessionRole}>{session.role}</div>
+        <h3 className={styles.sessionRole}>{session.role}</h3>
         <div className={styles.sessionMeta}>
-          <span className={styles.focusBadge}>{session.focus_area.replace('-', ' ')}</span>
+          <span className={styles.focusBadge}>{session.focus_area}</span>
           <span>{date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
           <span style={{ textTransform: 'capitalize' }}>{session.difficulty}</span>
-          {isComplete && tier && (
-            <span className={`${styles.tierBadge} ${styles[tierKey] || ''}`}>
-              {tier.label}
-            </span>
-          )}
         </div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {score !== null && (
+        {isComplete && session.overall_score !== null ? (
           <div className={styles.scoreValue}>
-            {score}<span>/100</span>
+            {session.overall_score}
+            <span>/100</span>
           </div>
+        ) : (
+          <span style={{ fontSize: '0.75rem', color: '#a1a1aa' }}>In progress</span>
         )}
-        <ChevronRight size={20} style={{ color: '#64748b', marginLeft: '12px' }} />
+        <ChevronRight size={20} style={{ color: '#71717a', marginLeft: '12px' }} />
       </div>
     </button>
   );
 }
-
-export type { SessionWithExchanges };

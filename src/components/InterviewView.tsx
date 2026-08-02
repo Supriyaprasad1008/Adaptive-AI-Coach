@@ -209,7 +209,7 @@ export default function InterviewView({
       </div>
 
       {error && (
-        <div style={{ padding: '12px 16px', borderRadius: '12px', background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.2)', color: '#fda4af', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ padding: '12px 16px', borderRadius: '12px', background: '#ffe4e6', border: '1px solid #fecdd3', color: '#9f1239', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <AlertCircle size={16} />
           {error}
         </div>
@@ -239,7 +239,7 @@ export default function InterviewView({
       {phase === 'answering' && currentQuestion && (
         <div className={styles.card}>
           <div className={styles.answerArea}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#cbd5e1' }}>Your Answer</label>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#ffffff' }}>Your Answer</label>
             <textarea
               ref={textareaRef}
               value={answer}
@@ -249,7 +249,7 @@ export default function InterviewView({
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{wordCount} words</span>
+            <span style={{ fontSize: '0.8rem', color: '#a1a1aa' }}>{wordCount} words</span>
             <button
               onClick={handleSubmit}
               disabled={answer.trim().length < 5}
@@ -265,7 +265,7 @@ export default function InterviewView({
       {phase === 'evaluating' && (
         <div className={styles.card} style={{ textAlign: 'center', padding: '48px' }}>
           <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8', margin: '0 auto' }} />
-          <p style={{ marginTop: '16px', color: '#cbd5e1' }}>Analyzing your answer and updating difficulty...</p>
+          <p style={{ marginTop: '16px', color: '#a1a1aa' }}>Analyzing your answer and updating difficulty...</p>
         </div>
       )}
 
@@ -275,13 +275,13 @@ export default function InterviewView({
 
       {phase === 'complete' && (
         <div className={styles.card} style={{ textAlign: 'center', padding: '48px' }}>
-          <CheckCircle2 size={48} style={{ color: '#34d399', margin: '0 auto 16px' }} />
+          <CheckCircle2 size={48} style={{ color: '#059669', margin: '0 auto 16px' }} />
           <h2>Session Completed!</h2>
-          <p style={{ color: '#cbd5e1', marginTop: '8px' }}>
-            You answered {answeredCount} questions. Let's review your complete feedback report.
+          <p style={{ color: '#475569', marginTop: '8px' }}>
+            Great job! You answered all {QUESTION_LIMIT} questions. View your report to see overall feedback.
           </p>
           <button onClick={handleEndSession} className={styles.submitBtn} style={{ margin: '24px auto 0' }}>
-            View Full Report <ArrowRight size={16} />
+            View final report
           </button>
         </div>
       )}
@@ -303,9 +303,9 @@ function FeedbackCard({
       <div className={styles.feedbackHeader}>
         <div className={styles.scorePill}>
           <span>{evaluation.score}</span>
-          <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>/100</span>
+          <span style={{ fontSize: '0.9rem', color: '#64748b' }}>/100</span>
         </div>
-        <span style={{ fontSize: '0.8rem', textTransform: 'capitalize', color: '#38bdf8', fontWeight: 600 }}>
+        <span style={{ fontSize: '0.8rem', textTransform: 'capitalize', color: '#1e3a8a', fontWeight: 600 }}>
           Next level: {evaluation.nextDifficulty}
         </span>
       </div>

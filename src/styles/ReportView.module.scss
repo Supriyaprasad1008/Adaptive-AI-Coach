@@ -7,7 +7,6 @@
   gap: 32px;
   max-width: 960px;
   margin: 0 auto;
-  animation: fadeIn 0.4s ease-out;
 }
 
 .backBtn {
@@ -17,7 +16,7 @@
 }
 
 .reportHeader {
-  @include glass-panel(0.8);
+  @include liquid-glass;
   border-radius: $radius-xl;
   padding: 36px;
   @include flex-between;
@@ -32,14 +31,15 @@
 
 .headerInfo {
   h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    color: $text-primary;
+    font-family: $font-display;
+    font-size: 2.75rem;
+    font-weight: 400;
+    color: #ffffff;
   }
 
   p {
     font-size: 0.9rem;
-    color: $text-muted;
+    color: #a1a1aa;
     margin-top: 6px;
   }
 }
@@ -50,28 +50,29 @@
   gap: 20px;
   padding: 20px 28px;
   border-radius: $radius-lg;
-  background: rgba(14, 165, 233, 0.1);
+  background: rgba(56, 189, 248, 0.1);
   border: 1px solid rgba(56, 189, 248, 0.25);
-  box-shadow: 0 15px 40px -15px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 10px 25px -10px rgba(56, 189, 248, 0.2);
 }
 
 .scoreBig {
-  font-size: 3rem;
-  font-weight: 900;
-  color: $accent-sky-light;
+  font-family: $font-display;
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #38bdf8;
   line-height: 1;
 
   span {
     font-size: 1.2rem;
-    color: $text-muted;
-    font-weight: 500;
+    color: #a1a1aa;
+    font-weight: 400;
   }
 }
 
 .tierLabel {
   font-size: 1.1rem;
-  font-weight: 700;
-  color: $text-primary;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .exchangesSection {
@@ -80,14 +81,15 @@
   gap: 20px;
 
   h2 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: $text-primary;
+    font-family: $font-display;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: #ffffff;
   }
 }
 
 .exchangeCard {
-  @include glass-panel(0.65);
+  @include liquid-glass;
   border-radius: $radius-lg;
   padding: 24px;
   display: flex;
@@ -103,38 +105,38 @@
   padding: 4px 12px;
   border-radius: $radius-full;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid $border-subtle;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.75rem;
   font-weight: 600;
-  color: $accent-teal-light;
+  color: #2dd4bf;
   text-transform: uppercase;
 }
 
 .qScore {
   font-size: 1.2rem;
-  font-weight: 800;
-  color: $accent-sky-light;
+  font-weight: 700;
+  color: #38bdf8;
 }
 
 .qTitle {
   font-size: 1.1rem;
-  font-weight: 700;
-  color: $text-primary;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .userAnswer {
   padding: 16px;
   border-radius: $radius-md;
-  background: rgba(2, 6, 23, 0.6);
-  border: 1px solid $border-subtle;
+  background: rgba(4, 25, 43, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.9rem;
-  color: $text-secondary;
+  color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
 }
 
 .feedbackText {
   font-size: 0.85rem;
-  color: $text-muted;
+  color: #a1a1aa;
   line-height: 1.6;
   white-space: pre-line;
 }

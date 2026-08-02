@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%" aria-label="Interview Coach Brain AI Speech Bubble Logo">
+  <defs>
+    <!-- Background Soft Light Blueish Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f0f7ff" />
+    </linearGradient>
+
+    <!-- Dark Navy to Deep Royal Gradient -->
+    <linearGradient id="navyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="60%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+
+    <!-- Electric Cyan Neural Gradient -->
+    <linearGradient id="cyanNeural" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#7dd3fc" />
+    </linearGradient>
+
+    <!-- Glowing Filters -->
+    <filter id="shadowFilter" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.12" />
+    </filter>
+
+    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#0ea5e9" flood-opacity="0.75" />
+    </filter>
+  </defs>
+
+
+
+  <!-- Speech Bubble Main Silhouette Path (Dark Navy Blue) -->
+  <path d="M 140 120 
+           H 372 
+           C 412 120, 442 150, 442 190 
+           V 290 
+           C 442 330, 412 360, 372 360 
+           H 260 
+           L 180 415 
+           V 360 
+           H 140 
+           C 100 360, 70 330, 70 290 
+           V 190 
+           C 70 150, 100 120, 140 120 Z" 
+        fill="none" 
+        stroke="url(#navyGrad)" 
+        stroke-width="26" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" />
+
+  <!-- Neural Brain Network - Left Hemisphere Synapses -->
+  <path d="M 240 170 
+           C 200 170, 150 190, 150 235 
+           C 150 260, 170 275, 190 280 
+           C 170 295, 180 320, 210 320 
+           C 230 320, 245 305, 250 290" 
+        fill="none" 
+        stroke="url(#cyanNeural)" 
+        stroke-width="10" 
+        stroke-linecap="round" />
+
+  <!-- Neural Brain Network - Right Hemisphere Synapses -->
+  <path d="M 272 170 
+           C 312 170, 362 190, 362 235 
+           C 362 260, 342 275, 322 280 
+           C 342 295, 332 320, 302 320 
+           C 282 320, 267 305, 262 290" 
+        fill="none" 
+        stroke="url(#cyanNeural)" 
+        stroke-width="10" 
+        stroke-linecap="round" />
+
+  <!-- Brain Central Fissure Core Line -->
+  <line x1="256" y1="165" x2="256" y2="315" 
+        stroke="url(#cyanNeural)" 
+        stroke-width="10" 
+        stroke-linecap="round" 
+        stroke-dasharray="14 10" />
+
+  <!-- Interconnecting Circuit Synapses -->
+  <line x1="200" y1="210" x2="256" y2="235" stroke="url(#cyanNeural)" stroke-width="6" opacity="0.8" />
+  <line x1="312" y1="210" x2="256" y2="235" stroke="url(#cyanNeural)" stroke-width="6" opacity="0.8" />
+  <line x1="190" y1="280" x2="256" y2="265" stroke="url(#cyanNeural)" stroke-width="6" opacity="0.8" />
+  <line x1="322" y1="280" x2="256" y2="265" stroke="url(#cyanNeural)" stroke-width="6" opacity="0.8" />
+
+  <!-- Glowing Neural AI Node Dots (Electric Cyan) -->
+  <!-- Top Center Intelligence Node -->
+  <circle cx="256" cy="165" r="16" fill="#0ea5e9" filter="url(#cyanGlow)" />
+  <circle cx="256" cy="165" r="7" fill="#ffffff" />
+
+  <!-- Left Frontal Node -->
+  <circle cx="200" cy="210" r="12" fill="#0ea5e9" filter="url(#cyanGlow)" />
+  <circle cx="200" cy="210" r="5" fill="#ffffff" />
+
+  <!-- Right Frontal Node -->
+  <circle cx="312" cy="210" r="12" fill="#0ea5e9" filter="url(#cyanGlow)" />
+  <circle cx="312" cy="210" r="5" fill="#ffffff" />
+
+  <!-- Central Synapse Hub -->
+  <circle cx="256" cy="235" r="18" fill="#38bdf8" filter="url(#cyanGlow)" />
+  <circle cx="256" cy="235" r="8" fill="#ffffff" />
+
+  <!-- Left Temporal Node -->
+  <circle cx="190" cy="280" r="12" fill="#0ea5e9" filter="url(#cyanGlow)" />
+  <circle cx="190" cy="280" r="5" fill="#ffffff" />
+
+  <!-- Right Temporal Node -->
+  <circle cx="322" cy="280" r="12" fill="#0ea5e9" filter="url(#cyanGlow)" />
+  <circle cx="322" cy="280" r="5" fill="#ffffff" />
+
+  <!-- Bottom Core Node -->
+  <circle cx="256" cy="315" r="15" fill="#0ea5e9" filter="url(#cyanGlow)" />
+  <circle cx="256" cy="315" r="6" fill="#ffffff" />
+</svg>

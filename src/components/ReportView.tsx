@@ -190,7 +190,7 @@ function ExchangeDetail({ exchange, index }: { exchange: InterviewExchange; inde
 
       {exchange.answer && (
         <div className={styles.userAnswer}>
-          <strong style={{ display: 'block', marginBottom: '4px', color: '#f8fafc', fontSize: '0.8rem' }}>YOUR ANSWER:</strong>
+          <strong style={{ display: 'block', marginBottom: '4px', color: '#ffffff', fontSize: '0.8rem' }}>YOUR ANSWER:</strong>
           {exchange.answer}
         </div>
       )}

@@ -1,27 +1,30 @@
-// Color System Tokens
-$bg-slate-950: #020617;
-$bg-slate-900: #0f172a;
-$bg-slate-800: #1e293b;
+// Fonts
+$font-display: 'Instrument Serif', serif;
+$font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-$accent-sky: #0ea5e9;
-$accent-sky-light: #38bdf8;
+// Color System Tokens (Deep Navy Dark & Liquid Glass Theme)
+$bg-navy: #04192b;
+$bg-navy-translucent: rgba(4, 25, 43, 0.65);
+$bg-white-glass: rgba(255, 255, 255, 0.04);
+
+// Text Tokens
+$text-primary: #ffffff;
+$text-secondary: rgba(255, 255, 255, 0.85);
+$text-muted: #a1a1aa;
+$text-dim: #71717a;
+
+// Accent Tokens
+$accent-blue: #0ea5e9;
+$accent-cyan: #38bdf8;
 $accent-teal: #14b8a6;
-$accent-teal-light: #2dd4bf;
-$accent-amber: #f59e0b;
 $accent-emerald: #10b981;
+$accent-amber: #f59e0b;
 $accent-rose: #f43f5e;
 
-$text-primary: #f8fafc;
-$text-secondary: #cbd5e1;
-$text-muted: #94a3b8;
-$text-dim: #64748b;
-
-$border-subtle: rgba(255, 255, 255, 0.08);
-$border-medium: rgba(255, 255, 255, 0.15);
-$border-highlight: rgba(56, 189, 248, 0.3);
-
-// Fonts
-$font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+// Borders
+$border-subtle: rgba(255, 255, 255, 0.12);
+$border-medium: rgba(255, 255, 255, 0.22);
+$border-highlight: rgba(255, 255, 255, 0.45);
 
 // Radii
 $radius-sm: 8px;
