@@ -2,9 +2,11 @@
 node_modules/
 
 # production build
+.next/
 /dist/
 /build/
 /dist-ssr/
+*.tsbuildinfo
 
 # local env files
 .env

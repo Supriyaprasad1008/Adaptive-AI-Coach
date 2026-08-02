@@ -1,4 +1,6 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   supabase,
   type Difficulty,
@@ -21,6 +23,7 @@ import {
   Flag,
   X,
 } from 'lucide-react';
+import styles from '@/styles/InterviewView.module.scss';
 
 interface InterviewViewProps {
   session: InterviewSession;
@@ -175,89 +178,84 @@ export default function InterviewView({
   };
 
   const answeredCount = exchanges.filter((e) => e.answer !== null).length;
-  const progress = Math.min(100, (answeredCount / QUESTION_LIMIT) * 100);
-  const diffMeta = DIFFICULTY_META[currentDifficulty];
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-900/75 p-4 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.95)] backdrop-blur-sm">
-        <div className="flex items-center gap-3">
+    <div className={styles.container}>
+      <div className={styles.topBar}>
+        <div className={styles.sessionInfo}>
           <button
             onClick={handleEndSession}
-            className="rounded-lg p-1.5 text-slate-500 transition hover:bg-white/[0.05] hover:text-slate-200"
+            style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
             title="End session"
           >
-            <X className="h-5 w-5" />
+            <X size={20} />
           </button>
           <div>
-            <p className="text-sm font-semibold text-slate-100">{session.role}</p>
-            <p className="text-xs capitalize text-slate-500">{session.focus_area.replace('-', ' ')}</p>
+            <h2>{session.role}</h2>
+            <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'capitalize' }}>
+              {session.focus_area.replace('-', ' ')}
+            </span>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className={`flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 ${diffMeta.ring}`}>
-            <span className={`h-2.5 w-2.5 rounded-full ${diffMeta.dot}`} />
-            <span className={`text-xs font-semibold ${diffMeta.color}`}>{diffMeta.label}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div className={`${styles.diffIndicator} ${styles[currentDifficulty]}`}>
+            <span className={styles.dot} />
+            <span style={{ textTransform: 'capitalize' }}>{currentDifficulty}</span>
           </div>
-          <span className="text-xs font-medium text-slate-500">
-            {answeredCount} / {QUESTION_LIMIT} answered
-          </span>
+          <button onClick={handleEndSession} className={styles.endBtn}>
+            End Session
+          </button>
         </div>
-      </div>
-
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-sky-400 via-cyan-400 to-teal-400 transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div style={{ padding: '12px 16px', borderRadius: '12px', background: 'rgba(244,63,94,0.1)', border: '1px solid rgba(244,63,94,0.2)', color: '#fda4af', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <AlertCircle size={16} />
           {error}
         </div>
       )}
 
       {currentQuestion && phase !== 'complete' && (
-        <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.95)] backdrop-blur-sm sm:p-8">
-          <div className="flex items-start gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-950">
-              {answeredCount + 1}
-            </div>
-            <div className="flex-1">
-              <div className="mb-1 flex items-center gap-2">
-                <span className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-slate-300">
-                  {currentQuestion.tag.replace('-', ' ')}
-                </span>
-              </div>
-              <p className="text-lg font-medium leading-relaxed text-slate-100">
-                {currentQuestion.text}
-              </p>
-            </div>
+        <div className={styles.card}>
+          <div className={styles.questionHeader}>
+            <span className={styles.tagBadge}>{currentQuestion.tag.replace('-', ' ')}</span>
+            <span className={styles.questionNumber}>Question {answeredCount + 1} of {QUESTION_LIMIT}</span>
           </div>
+          <h3 className={styles.questionText}>{currentQuestion.text}</h3>
+
+          {currentQuestion.guidance.length > 0 && (
+            <div className={styles.guidanceBox}>
+              <h4><Lightbulb size={16} /> Key evaluation criteria</h4>
+              <ul>
+                {currentQuestion.guidance.map((g, idx) => (
+                  <li key={idx}>{g}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
 
       {phase === 'answering' && currentQuestion && (
-        <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.95)] backdrop-blur-sm">
-          <label className="mb-2 block text-sm font-medium text-slate-300">Your answer</label>
-          <textarea
-            ref={textareaRef}
-            value={answer}
-            onChange={(e) => handleAnswerChange(e.target.value)}
-            placeholder="Type your answer as if you were speaking to the interviewer. Take your time - be specific and structured."
-            rows={6}
-            className="w-full resize-none rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm leading-relaxed text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-sky-400/70 focus:bg-slate-900 focus:ring-2 focus:ring-sky-500/20"
-          />
-          <div className="mt-3 flex items-center justify-between">
-            <span className="text-xs text-slate-500">{wordCount} words</span>
+        <div className={styles.card}>
+          <div className={styles.answerArea}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#cbd5e1' }}>Your Answer</label>
+            <textarea
+              ref={textareaRef}
+              value={answer}
+              onChange={(e) => handleAnswerChange(e.target.value)}
+              placeholder="Type your answer as if you were speaking to the interviewer. Take your time — be specific and structured."
+              rows={6}
+            />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{wordCount} words</span>
             <button
               onClick={handleSubmit}
               disabled={answer.trim().length < 5}
-              className="inline-flex items-center gap-2 rounded-xl bg-sky-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-500/20 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:bg-slate-700 disabled:text-slate-400"
+              className={styles.submitBtn}
             >
-              <Send className="h-4 w-4" />
+              <Send size={16} />
               Submit answer
             </button>
           </div>
@@ -265,9 +263,9 @@ export default function InterviewView({
       )}
 
       {phase === 'evaluating' && (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-slate-900/75 p-12 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.95)] backdrop-blur-sm">
-          <Loader2 className="h-8 w-8 animate-spin text-sky-300" />
-          <p className="mt-4 text-sm font-medium text-slate-400">Analyzing your answer...</p>
+        <div className={styles.card} style={{ textAlign: 'center', padding: '48px' }}>
+          <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8', margin: '0 auto' }} />
+          <p style={{ marginTop: '16px', color: '#cbd5e1' }}>Analyzing your answer and updating difficulty...</p>
         </div>
       )}
 
@@ -276,20 +274,14 @@ export default function InterviewView({
       )}
 
       {phase === 'complete' && (
-        <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-8 text-center shadow-[0_20px_60px_-35px_rgba(15,23,42,0.95)] backdrop-blur-sm">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/10">
-            <CheckCircle2 className="h-7 w-7 text-emerald-300" />
-          </div>
-          <h3 className="mt-4 text-lg font-semibold text-slate-100">Session complete</h3>
-          <p className="mt-1 text-sm text-slate-400">
-            You answered {answeredCount} questions. Let's review your full report.
+        <div className={styles.card} style={{ textAlign: 'center', padding: '48px' }}>
+          <CheckCircle2 size={48} style={{ color: '#34d399', margin: '0 auto 16px' }} />
+          <h2>Session Completed!</h2>
+          <p style={{ color: '#cbd5e1', marginTop: '8px' }}>
+            You answered {answeredCount} questions. Let's review your complete feedback report.
           </p>
-          <button
-            onClick={handleEndSession}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-slate-950/40 transition hover:bg-white"
-          >
-            View report
-            <ArrowRight className="h-4 w-4" />
+          <button onClick={handleEndSession} className={styles.submitBtn} style={{ margin: '24px auto 0' }}>
+            View Full Report <ArrowRight size={16} />
           </button>
         </div>
       )}
@@ -306,81 +298,48 @@ function FeedbackCard({
   onNext: () => void;
   isLast: boolean;
 }) {
-  const diffChange = evaluation.nextDifficulty;
-  const TrendIcon = diffChange === 'hard' ? TrendingUp : diffChange === 'easy' ? TrendingDown : Minus;
-  const trendColor = diffChange === 'hard' ? 'text-rose-300' : diffChange === 'easy' ? 'text-emerald-300' : 'text-slate-300';
-  const trendLabel = diffChange === 'hard' ? 'Difficulty increasing' : diffChange === 'easy' ? 'Difficulty easing' : 'Holding steady';
-
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl border border-white/10 bg-slate-900/75 p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.95)] backdrop-blur-sm">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-slate-500">Score</p>
-            <p className="mt-1 text-4xl font-bold text-slate-100">
-              {evaluation.score}
-              <span className="text-lg font-medium text-slate-500">/100</span>
-            </p>
-          </div>
-          <div className={`flex items-center gap-1.5 rounded-full border border-white/10 bg-slate-950/70 px-3 py-1.5 text-xs font-semibold ${trendColor}`}>
-            <TrendIcon className="h-3.5 w-3.5" />
-            {trendLabel}
-          </div>
+    <div className={styles.feedbackBox}>
+      <div className={styles.feedbackHeader}>
+        <div className={styles.scorePill}>
+          <span>{evaluation.score}</span>
+          <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>/100</span>
         </div>
-        <div className="mt-4 border-t border-white/10 pt-4">
-          <p className="whitespace-pre-line text-sm leading-relaxed text-slate-300">{evaluation.feedback}</p>
-        </div>
+        <span style={{ fontSize: '0.8rem', textTransform: 'capitalize', color: '#38bdf8', fontWeight: 600 }}>
+          Next level: {evaluation.nextDifficulty}
+        </span>
       </div>
 
-      {evaluation.strengths.length > 0 && (
-        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-5">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-300" />
-            <h4 className="text-sm font-semibold text-emerald-200">Strengths</h4>
-          </div>
-          <ul className="mt-2 space-y-1.5">
-            {evaluation.strengths.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-emerald-100">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-300" />
-                {s}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className={styles.feedbackBody}>
+        {evaluation.feedback}
+      </div>
 
-      {evaluation.improvements.length > 0 && (
-        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-5">
-          <div className="flex items-center gap-2">
-            <Lightbulb className="h-4 w-4 text-amber-300" />
-            <h4 className="text-sm font-semibold text-amber-200">Areas to improve</h4>
+      <div className={styles.listsGrid}>
+        {evaluation.strengths.length > 0 && (
+          <div className={styles.strengthsList}>
+            <h5><CheckCircle2 size={16} /> Strengths</h5>
+            <ul>
+              {evaluation.strengths.map((s, idx) => (
+                <li key={idx}>• {s}</li>
+              ))}
+            </ul>
           </div>
-          <ul className="mt-2 space-y-1.5">
-            {evaluation.improvements.map((s, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-amber-100">
-                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
-                {s}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <button
-        onClick={onNext}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-slate-950/40 transition hover:bg-white"
-      >
-        {isLast ? (
-          <>
-            <Flag className="h-4 w-4" />
-            Finish and view report
-          </>
-        ) : (
-          <>
-            Next question
-            <ArrowRight className="h-4 w-4" />
-          </>
         )}
+
+        {evaluation.improvements.length > 0 && (
+          <div className={styles.improvementsList}>
+            <h5><Lightbulb size={16} /> Key Improvements</h5>
+            <ul>
+              {evaluation.improvements.map((s, idx) => (
+                <li key={idx}>• {s}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <button onClick={onNext} className={styles.submitBtn} style={{ width: '100%', justifyContent: 'center' }}>
+        {isLast ? <>Finish and View Report <Flag size={16} /></> : <>Next Question <ArrowRight size={16} /></>}
       </button>
     </div>
   );

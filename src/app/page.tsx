@@ -1,4 +1,6 @@
-﻿import { useCallback, useEffect, useState } from 'react';
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
 import {
   supabase,
   type Difficulty,
@@ -11,13 +13,14 @@ import Dashboard from '@/components/Dashboard';
 import InterviewView from '@/components/InterviewView';
 import ReportView from '@/components/ReportView';
 import { Brain } from 'lucide-react';
+import styles from '@/styles/AppLayout.module.scss';
 
 type View =
   | { name: 'dashboard' }
   | { name: 'interview'; session: InterviewSession; exchanges: InterviewExchange[] }
   | { name: 'report'; sessionId: string };
 
-export default function App() {
+export default function Home() {
   const [view, setView] = useState<View>({ name: 'dashboard' });
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -95,33 +98,27 @@ export default function App() {
   }, [view]);
 
   return (
-    <div className="min-h-screen bg-transparent text-slate-100">
-      <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3.5 sm:px-6">
-          <button
-            onClick={handleBackToDashboard}
-            className="group flex items-center gap-2.5"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/15 text-sky-200 ring-1 ring-sky-400/20 transition group-hover:bg-sky-500/20">
-              <Brain className="h-5 w-5" />
+    <div className={styles.layoutContainer}>
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <button onClick={handleBackToDashboard} className={styles.logoBtn}>
+            <div className={styles.logoIcon}>
+              <Brain size={20} />
             </div>
-            <div className="text-left">
-              <p className="text-sm font-bold leading-tight text-slate-100">Interview Coach</p>
-              <p className="text-xs leading-tight text-slate-400">Adaptive prep</p>
+            <div>
+              <p className={styles.logoTitle}>Interview Coach</p>
+              <p className={styles.logoSubtitle}>Adaptive AI Prep</p>
             </div>
           </button>
           {view.name !== 'dashboard' && (
-            <button
-              onClick={handleBackToDashboard}
-              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white"
-            >
+            <button onClick={handleBackToDashboard} className={styles.dashboardNavBtn}>
               Dashboard
             </button>
           )}
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+      <main className={styles.mainContent}>
         {view.name === 'dashboard' && (
           <Dashboard
             onStartSession={handleStartSession}
@@ -146,10 +143,8 @@ export default function App() {
         )}
       </main>
 
-      <footer className="border-t border-white/10 py-6">
-        <p className="text-center text-xs text-slate-500">
-          Adaptive Interview Prep Coach - Practice makes prepared
-        </p>
+      <footer className={styles.footer}>
+        <p>Adaptive AI Interview Prep Coach — Practice makes prepared</p>
       </footer>
     </div>
   );
