@@ -6,10 +6,9 @@ import {
   type Difficulty,
   type InterviewExchange,
   type InterviewSession,
-  DIFFICULTY_META,
 } from '@/lib/supabase';
 import { pickNextQuestion, type Question } from '@/lib/questions';
-import { evaluateAnswer } from '@/lib/scoring';
+import { evaluateAnswer, countWords } from '@/lib/scoring';
 import {
   Send,
   Loader2,
@@ -17,9 +16,6 @@ import {
   AlertCircle,
   ArrowRight,
   Lightbulb,
-  TrendingUp,
-  TrendingDown,
-  Minus,
   Flag,
   X,
 } from 'lucide-react';
@@ -107,7 +103,7 @@ export default function InterviewView({
 
   const handleAnswerChange = (value: string) => {
     setAnswer(value);
-    setWordCount(value.trim().split(/\s+/).filter(Boolean).length);
+    setWordCount(countWords(value));
   };
 
   const handleSubmit = async () => {

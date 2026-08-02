@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserCheck, LogOut } from 'lucide-react';
 import AuthModal from '@/components/AuthModal';
@@ -81,7 +82,7 @@ export default function HeaderNav() {
       >
         <div className={styles.headerContent}>
           <Link href="/" className={styles.logoBtn}>
-            <img src="/logo.svg" alt="Interview Coach Logo" width={34} height={34} style={{ borderRadius: '8px' }} />
+            <Image src="/logo.svg" alt="Interview Coach Logo" width={34} height={34} style={{ borderRadius: '8px' }} />
             <span className={`${styles.logoTitle} ${isTransparent ? styles.textWhite : styles.textNavy}`}>
               Interview Coach<sup>®</sup>
             </span>

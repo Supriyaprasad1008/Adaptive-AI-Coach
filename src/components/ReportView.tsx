@@ -5,22 +5,10 @@ import {
   supabase,
   type InterviewExchange,
   type InterviewSession,
-  DIFFICULTY_META,
   type Difficulty,
 } from '@/lib/supabase';
 import { computeOverallScore, scoreTier } from '@/lib/scoring';
-import {
-  ArrowLeft,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Award,
-  Target,
-  Clock,
-  CheckCircle2,
-  Lightbulb,
-  BarChart3,
-} from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import styles from '@/styles/ReportView.module.scss';
 
 interface ReportViewProps {

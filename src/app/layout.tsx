@@ -1,9 +1,23 @@
 import type { Metadata } from 'next';
+import { Instrument_Serif, Inter } from 'next/font/google';
 import HeaderNav from '@/components/HeaderNav';
 import Footer from '@/components/Footer';
 import PageLoader from '@/components/PageLoader';
 import styles from '@/styles/AppLayout.module.scss';
 import '@/styles/globals.scss';
+
+const instrumentSerif = Instrument_Serif({
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Interview Coach® — Where Dreams Rise Through Silence',
@@ -21,18 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-        <link rel="shortcut icon" href="/logo.svg" />
-        <link rel="apple-touch-icon" href="/logo.svg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${instrumentSerif.variable} ${inter.variable}`}>
       <body>
         <PageLoader />
         <div className={styles.layoutContainer}>

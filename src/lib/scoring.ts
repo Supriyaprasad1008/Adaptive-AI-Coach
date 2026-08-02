@@ -1,4 +1,4 @@
-﻿import type { AnswerEvaluation, Difficulty } from './supabase';
+import type { AnswerEvaluation, Difficulty } from './supabase';
 import { DIFFICULTY_ORDER } from './supabase';
 import type { Question } from './questions';
 
@@ -22,7 +22,7 @@ const STAR_KEYWORDS = {
 
 const STRUCTURE_INDICATORS = ['first', 'second', 'third', 'finally', 'then', 'next', 'after that', 'additionally', 'however', 'because', 'so that', 'in order to'];
 
-function countWords(text: string): number {
+export function countWords(text: string): number {
   return text.trim().split(/\s+/).filter(Boolean).length;
 }
 
@@ -92,13 +92,10 @@ export function evaluateAnswer(answer: string, question: Question): AnswerEvalua
     improvements.push(`Reduce filler words (detected ~${fillerCount}) - practice pausing instead.`);
   }
 
-  const weakCount = countOccurrences(trimmed, FILLER_WORDS) + countOccurrences(trimmed, WEAK_INDICATORS);
   if (countOccurrences(trimmed, WEAK_INDICATORS) > 0) {
     score -= 8;
     improvements.push("Avoid hedging language ('not sure', 'I guess') - speak with confidence.");
   }
-
-  void weakCount;
 
   if (question.area === 'behavioral') {
     const { present, missing } = hasStarStructure(trimmed);

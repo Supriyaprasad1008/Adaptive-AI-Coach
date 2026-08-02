@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_SUPABASE_URL)) as string;
-const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_SUPABASE_ANON_KEY)) as string;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://noewbqehygqfiicxvflq.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vZXdicWVoeWdxZmlpY3h2ZmxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU2NDgyMzIsImV4cCI6MjEwMTIyNDIzMn0.QwNpwOqA2zcGTqn6HzYkaFdA9dtVINtB2DujsdDkNRM';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -50,25 +50,10 @@ export interface AnswerEvaluation {
 
 export const DIFFICULTY_ORDER: Difficulty[] = ['easy', 'medium', 'hard'];
 
-export const DIFFICULTY_META: Record<Difficulty, { label: string; color: string; ring: string; dot: string }> = {
-  easy: {
-    label: 'Easy',
-    color: 'text-emerald-300',
-    ring: 'ring-emerald-500/20',
-    dot: 'bg-emerald-400',
-  },
-  medium: {
-    label: 'Medium',
-    color: 'text-amber-300',
-    ring: 'ring-amber-500/20',
-    dot: 'bg-amber-400',
-  },
-  hard: {
-    label: 'Hard',
-    color: 'text-rose-300',
-    ring: 'ring-rose-500/20',
-    dot: 'bg-rose-400',
-  },
+export const DIFFICULTY_META: Record<Difficulty, { label: string; key: Difficulty }> = {
+  easy: { label: 'Easy', key: 'easy' },
+  medium: { label: 'Medium', key: 'medium' },
+  hard: { label: 'Hard', key: 'hard' },
 };
 
 export const FOCUS_AREAS: { value: FocusArea; label: string; description: string }[] = [

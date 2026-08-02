@@ -36,7 +36,7 @@ export default function LandingView({ onBeginJourney }: LandingViewProps) {
           </h1>
 
           <p className={`${styles.heroDesc} animate-fade-rise-delay`} style={{ color: '#e2e8f0' }}>
-            We're designing tools for deep thinkers, bold creators, and quiet rebels.
+            We&apos;re designing tools for deep thinkers, bold creators, and quiet rebels.
             Amid the chaos, we build digital spaces for sharp focus and inspired work.
           </p>
 
