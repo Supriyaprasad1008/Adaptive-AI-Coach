@@ -10,6 +10,8 @@ import {
 import { computeOverallScore } from '@/lib/scoring';
 import InterviewView from '@/components/InterviewView';
 
+export const dynamic = 'force-dynamic';
+
 function InterviewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -72,7 +74,7 @@ function InterviewContent() {
 
   if (loading || !session) {
     return (
-      <div style={{ textAlign: 'center', padding: '64px', color: '#a1a1aa' }}>
+      <div style={{ textAlign: 'center', padding: '64px', color: '#64748b' }}>
         Loading session...
       </div>
     );
@@ -90,7 +92,7 @@ function InterviewContent() {
 
 export default function InterviewPage() {
   return (
-    <Suspense fallback={<div style={{ textAlign: 'center', padding: '64px', color: '#a1a1aa' }}>Loading session...</div>}>
+    <Suspense fallback={<div style={{ textAlign: 'center', padding: '64px', color: '#64748b' }}>Loading session...</div>}>
       <InterviewContent />
     </Suspense>
   );
