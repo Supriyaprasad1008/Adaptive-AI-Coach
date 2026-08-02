@@ -1,0 +1,142 @@
+@import './variables';
+@import './mixins';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.backBtn {
+  @include secondary-btn;
+  align-self: flex-start;
+  font-size: 0.85rem;
+}
+
+.reportHeader {
+  @include clean-card;
+  border-radius: $radius-xl;
+  padding: 36px;
+  @include flex-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px;
+  }
+}
+
+.headerInfo {
+  h1 {
+    font-family: $font-display;
+    font-size: 2.75rem;
+    font-weight: 400;
+    color: $text-primary;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $text-muted;
+    margin-top: 6px;
+  }
+}
+
+.scoreBanner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 28px;
+  border-radius: $radius-lg;
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  box-shadow: 0 10px 25px -10px rgba(37, 99, 235, 0.12);
+}
+
+.scoreBig {
+  font-family: $font-display;
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: #1e3a8a;
+  line-height: 1;
+
+  span {
+    font-size: 1.2rem;
+    color: $text-muted;
+    font-weight: 400;
+  }
+}
+
+.tierLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.exchangesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  h2 {
+    font-family: $font-display;
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: $text-primary;
+  }
+}
+
+.exchangeCard {
+  @include clean-card;
+  border-radius: $radius-lg;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.exchangeTop {
+  @include flex-between;
+}
+
+.qTag {
+  padding: 4px 12px;
+  border-radius: $radius-full;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-transform: uppercase;
+}
+
+.qScore {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.qTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.userAnswer {
+  padding: 16px;
+  border-radius: $radius-md;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+  color: $text-secondary;
+  line-height: 1.6;
+}
+
+.feedbackText {
+  font-size: 0.85rem;
+  color: $text-muted;
+  line-height: 1.6;
+  white-space: pre-line;
+}

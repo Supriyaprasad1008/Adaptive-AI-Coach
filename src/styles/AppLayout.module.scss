@@ -1,0 +1,198 @@
+@import './variables';
+@import './mixins';
+
+.layoutContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4.25rem;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.headerTransparent {
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+.headerSolid {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px -10px rgba(15, 23, 42, 0.03);
+  position: fixed;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e2e8f0;
+    transition: left 0.3s ease;
+  }
+
+  &.hasSidebar::after {
+    left: 270px; /* Removes border line over top of sidebar (0..270px) */
+    @media (max-width: 1024px) {
+      left: 0;
+    }
+  }
+}
+
+.headerContent {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  padding: 0 2rem;
+  @include flex-between;
+
+  @media (max-width: 640px) {
+    padding: 0 1.25rem;
+  }
+}
+
+.logoBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.logoTitle {
+  font-family: $font-display;
+  font-size: 2.25rem;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+  transition: color 0.3s ease;
+
+  sup {
+    font-size: 0.85rem;
+    vertical-align: super;
+    font-weight: 400;
+    margin-left: 1px;
+  }
+}
+
+.textWhite {
+  color: #ffffff;
+}
+
+.textNavy {
+  color: #0f172a;
+}
+
+.navLinks {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}
+
+.navLink {
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.navLinkWhite {
+  color: rgba(255, 255, 255, 0.75);
+
+  &:hover, &.active {
+    color: #ffffff;
+    font-weight: 600;
+  }
+}
+
+.navLinkNavy {
+  color: #475569;
+
+  &:hover, &.active {
+    color: #0f172a;
+    font-weight: 600;
+  }
+}
+
+.ctaBtn {
+  @include primary-btn;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+}
+
+.ctaBtnGlass {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-weight: 500;
+  border-radius: $radius-full;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: $transition-smooth;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+  }
+}
+
+.profileBadgeTransparent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.profileBadgeSolid {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.mainContent {
+  flex: 1;
+  width: 100%;
+  margin: 0;
+  padding: 4.25rem 0 0 0;
+}
