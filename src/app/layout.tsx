@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HeaderNav from '@/components/HeaderNav';
+import Footer from '@/components/Footer';
 import styles from '@/styles/AppLayout.module.scss';
 import '@/styles/globals.scss';
 
@@ -24,23 +25,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {/* Fullscreen Video Background */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="videoBackground"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
-        />
-        <div className="videoOverlay" />
-
         <div className={styles.layoutContainer}>
           <HeaderNav />
           <main className={styles.mainContent}>{children}</main>
-          <footer className={styles.footer}>
-            <p>© 2026 Interview Coach® — Where dreams rise through the silence.</p>
-          </footer>
+          <Footer />
         </div>
       </body>
     </html>

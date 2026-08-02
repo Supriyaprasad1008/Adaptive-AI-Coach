@@ -2,29 +2,36 @@
 $font-display: 'Instrument Serif', serif;
 $font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-// Color System Tokens (Deep Navy Dark & Liquid Glass Theme)
-$bg-navy: #04192b;
-$bg-navy-translucent: rgba(4, 25, 43, 0.65);
-$bg-white-glass: rgba(255, 255, 255, 0.04);
+// Color System Tokens — Minimalistic Cool Professional (White-Blueish Theme)
+$bg-page: #f4f8fc;
+$bg-card: #ffffff;
+$bg-slate-50: #f8fafc;
+$bg-slate-100: #f1f5f9;
+$bg-slate-200: #e2e8f0;
 
-// Text Tokens
-$text-primary: #ffffff;
-$text-secondary: rgba(255, 255, 255, 0.85);
-$text-muted: #a1a1aa;
-$text-dim: #71717a;
+// Dark Blue Buttons & Accents
+$btn-dark-blue: #0f172a;
+$btn-dark-blue-hover: #1e293b;
+$btn-dark-blue-active: #020617;
 
-// Accent Tokens
-$accent-blue: #0ea5e9;
-$accent-cyan: #38bdf8;
-$accent-teal: #14b8a6;
-$accent-emerald: #10b981;
-$accent-amber: #f59e0b;
-$accent-rose: #f43f5e;
+// Accent Colors
+$accent-blue: #2563eb;
+$accent-cyan: #0ea5e9;
+$accent-teal: #0d9488;
+$accent-emerald: #059669;
+$accent-amber: #d97706;
+$accent-rose: #e11d48;
+
+// Typography (Dark Slate & Cool Navy for High Contrast Readability)
+$text-primary: #0f172a;
+$text-secondary: #334155;
+$text-muted: #64748b;
+$text-dim: #94a3b8;
 
 // Borders
-$border-subtle: rgba(255, 255, 255, 0.12);
-$border-medium: rgba(255, 255, 255, 0.22);
-$border-highlight: rgba(255, 255, 255, 0.45);
+$border-subtle: #e2e8f0;
+$border-medium: #cbd5e1;
+$border-highlight: #93c5fd;
 
 // Radii
 $radius-sm: 8px;

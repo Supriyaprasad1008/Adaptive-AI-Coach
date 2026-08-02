@@ -16,7 +16,7 @@
 }
 
 .reportHeader {
-  @include liquid-glass;
+  @include clean-card;
   border-radius: $radius-xl;
   padding: 36px;
   @include flex-between;
@@ -34,12 +34,12 @@
     font-family: $font-display;
     font-size: 2.75rem;
     font-weight: 400;
-    color: #ffffff;
+    color: $text-primary;
   }
 
   p {
     font-size: 0.9rem;
-    color: #a1a1aa;
+    color: $text-muted;
     margin-top: 6px;
   }
 }
@@ -50,21 +50,21 @@
   gap: 20px;
   padding: 20px 28px;
   border-radius: $radius-lg;
-  background: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  box-shadow: 0 10px 25px -10px rgba(56, 189, 248, 0.2);
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  box-shadow: 0 10px 25px -10px rgba(37, 99, 235, 0.12);
 }
 
 .scoreBig {
   font-family: $font-display;
   font-size: 3.5rem;
   font-weight: 400;
-  color: #38bdf8;
+  color: #1e3a8a;
   line-height: 1;
 
   span {
     font-size: 1.2rem;
-    color: #a1a1aa;
+    color: $text-muted;
     font-weight: 400;
   }
 }
@@ -72,7 +72,7 @@
 .tierLabel {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: $text-primary;
 }
 
 .exchangesSection {
@@ -84,12 +84,12 @@
     font-family: $font-display;
     font-size: 1.75rem;
     font-weight: 400;
-    color: #ffffff;
+    color: $text-primary;
   }
 }
 
 .exchangeCard {
-  @include liquid-glass;
+  @include clean-card;
   border-radius: $radius-lg;
   padding: 24px;
   display: flex;
@@ -104,39 +104,39 @@
 .qTag {
   padding: 4px 12px;
   border-radius: $radius-full;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2dd4bf;
+  color: #2563eb;
   text-transform: uppercase;
 }
 
 .qScore {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #38bdf8;
+  color: #2563eb;
 }
 
 .qTitle {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #ffffff;
+  color: $text-primary;
 }
 
 .userAnswer {
   padding: 16px;
   border-radius: $radius-md;
-  background: rgba(4, 25, 43, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: $text-secondary;
   line-height: 1.6;
 }
 
 .feedbackText {
   font-size: 0.85rem;
-  color: #a1a1aa;
+  color: $text-muted;
   line-height: 1.6;
   white-space: pre-line;
 }

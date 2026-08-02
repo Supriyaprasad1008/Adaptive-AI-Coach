@@ -12,13 +12,20 @@
   justify-content: space-between;
 }
 
+@mixin clean-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05);
+  position: relative;
+}
+
 @mixin liquid-glass {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.04);
   background-blend-mode: luminosity;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: none;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
 
@@ -45,46 +52,52 @@
 }
 
 @mixin primary-btn {
-  @include liquid-glass;
+  background: $btn-dark-blue;
+  color: #ffffff;
+  font-weight: 500;
+  border-radius: $radius-full;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #ffffff;
-  font-weight: 500;
-  border-radius: $radius-full;
-  padding: 14px 36px;
-  font-size: 1rem;
-  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
   transition: $transition-smooth;
 
   &:hover {
-    transform: scale(1.03);
-    background: rgba(255, 255, 255, 0.08);
+    background: $btn-dark-blue-hover;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.22);
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
 }
 
 @mixin secondary-btn {
-  @include liquid-glass;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: rgba(255, 255, 255, 0.85);
+  background: #ffffff;
+  color: $text-primary;
+  border: 1px solid $border-subtle;
   font-weight: 500;
   border-radius: $radius-full;
   padding: 10px 22px;
   font-size: 0.875rem;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
   transition: $transition-smooth;
 
   &:hover {
-    color: #ffffff;
-    transform: scale(1.03);
-    background: rgba(255, 255, 255, 0.06);
+    background: $bg-slate-50;
+    border-color: $border-medium;
+    color: $btn-dark-blue;
+    transform: translateY(-1px);
   }
 }

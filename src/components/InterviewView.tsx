@@ -239,7 +239,7 @@ export default function InterviewView({
       {phase === 'answering' && currentQuestion && (
         <div className={styles.card}>
           <div className={styles.answerArea}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#ffffff' }}>Your Answer</label>
+            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#0f172a' }}>Your Answer</label>
             <textarea
               ref={textareaRef}
               value={answer}
@@ -249,7 +249,7 @@ export default function InterviewView({
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '0.8rem', color: '#a1a1aa' }}>{wordCount} words</span>
+            <span style={{ fontSize: '0.8rem', color: '#64748b' }}>{wordCount} words</span>
             <button
               onClick={handleSubmit}
               disabled={answer.trim().length < 5}
@@ -264,8 +264,8 @@ export default function InterviewView({
 
       {phase === 'evaluating' && (
         <div className={styles.card} style={{ textAlign: 'center', padding: '48px' }}>
-          <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#38bdf8', margin: '0 auto' }} />
-          <p style={{ marginTop: '16px', color: '#a1a1aa' }}>Analyzing your answer and updating difficulty...</p>
+          <Loader2 size={32} style={{ animation: 'spin 1s linear infinite', color: '#2563eb', margin: '0 auto' }} />
+          <p style={{ marginTop: '16px', color: '#64748b' }}>Analyzing your answer and updating difficulty...</p>
         </div>
       )}
 

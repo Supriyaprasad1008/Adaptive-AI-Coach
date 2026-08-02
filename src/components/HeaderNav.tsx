@@ -17,6 +17,7 @@ export default function HeaderNav() {
   const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('interview_coach_user');
@@ -27,6 +28,20 @@ export default function HeaderNav() {
         localStorage.removeItem('interview_coach_user');
       }
     }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleLoginSuccess = (profile: UserProfile) => {
@@ -50,6 +65,9 @@ export default function HeaderNav() {
     }
   };
 
+  // On home page at top, render transparent overlay navbar
+  const isTransparent = pathname === '/' && !scrolled;
+
   return (
     <>
       <AuthModal
@@ -58,11 +76,13 @@ export default function HeaderNav() {
         onLoginSuccess={handleLoginSuccess}
       />
 
-      <header className={styles.header}>
+      <header
+        className={`${styles.header} ${isTransparent ? styles.headerTransparent : styles.headerSolid}`}
+      >
         <div className={styles.headerContent}>
           <Link href="/" className={styles.logoBtn}>
             <img src="/logo.svg" alt="Interview Coach Logo" width={34} height={34} style={{ borderRadius: '8px' }} />
-            <span className={styles.logoTitle}>
+            <span className={`${styles.logoTitle} ${isTransparent ? styles.textWhite : styles.textNavy}`}>
               Interview Coach<sup>®</sup>
             </span>
           </Link>
@@ -70,19 +90,25 @@ export default function HeaderNav() {
           <nav className={styles.navLinks}>
             <Link
               href="/"
-              className={`${styles.navLink} ${pathname === '/' ? styles.active : ''}`}
+              className={`${styles.navLink} ${isTransparent ? styles.navLinkWhite : styles.navLinkNavy} ${pathname === '/' ? styles.active : ''}`}
             >
               Home
             </Link>
             <Link
+              href="/roles"
+              className={`${styles.navLink} ${isTransparent ? styles.navLinkWhite : styles.navLinkNavy} ${pathname === '/roles' ? styles.active : ''}`}
+            >
+              Roles
+            </Link>
+            <Link
               href="/practice"
-              className={`${styles.navLink} ${pathname === '/practice' ? styles.active : ''}`}
+              className={`${styles.navLink} ${isTransparent ? styles.navLinkWhite : styles.navLinkNavy} ${pathname === '/practice' ? styles.active : ''}`}
             >
               Practice
             </Link>
             <Link
               href="/analytics"
-              className={`${styles.navLink} ${pathname === '/analytics' ? styles.active : ''}`}
+              className={`${styles.navLink} ${isTransparent ? styles.navLinkWhite : styles.navLinkNavy} ${pathname === '/analytics' ? styles.active : ''}`}
             >
               Analytics
             </Link>
@@ -93,21 +119,9 @@ export default function HeaderNav() {
               <>
                 <Link
                   href="/practice"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    padding: '6px 14px',
-                    borderRadius: '9999px',
-                    color: '#ffffff',
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    textDecoration: 'none',
-                  }}
+                  className={isTransparent ? styles.profileBadgeTransparent : styles.profileBadgeSolid}
                 >
-                  <UserCheck size={16} style={{ color: '#38bdf8' }} />
+                  <UserCheck size={16} style={{ color: isTransparent ? '#38bdf8' : '#2563eb' }} />
                   <span>{user.name}</span>
                 </Link>
 
@@ -116,7 +130,7 @@ export default function HeaderNav() {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#a1a1aa',
+                    color: isTransparent ? 'rgba(255,255,255,0.7)' : '#64748b',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -127,7 +141,10 @@ export default function HeaderNav() {
                 </button>
               </>
             ) : (
-              <button onClick={handleBeginJourney} className={styles.ctaBtn}>
+              <button
+                onClick={handleBeginJourney}
+                className={isTransparent ? styles.ctaBtnGlass : styles.ctaBtn}
+              >
                 Begin Journey
               </button>
             )}

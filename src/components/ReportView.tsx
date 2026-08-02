@@ -190,14 +190,14 @@ function ExchangeDetail({ exchange, index }: { exchange: InterviewExchange; inde
 
       {exchange.answer && (
         <div className={styles.userAnswer}>
-          <strong style={{ display: 'block', marginBottom: '4px', color: '#ffffff', fontSize: '0.8rem' }}>YOUR ANSWER:</strong>
+          <strong style={{ display: 'block', marginBottom: '4px', color: '#0f172a', fontSize: '0.8rem' }}>YOUR ANSWER:</strong>
           {exchange.answer}
         </div>
       )}
 
       {exchange.feedback && (
         <div className={styles.feedbackText}>
-          <strong style={{ display: 'block', marginBottom: '4px', color: '#38bdf8', fontSize: '0.8rem' }}>FEEDBACK:</strong>
+          <strong style={{ display: 'block', marginBottom: '4px', color: '#1e3a8a', fontSize: '0.8rem' }}>FEEDBACK:</strong>
           {exchange.feedback}
         </div>
       )}
