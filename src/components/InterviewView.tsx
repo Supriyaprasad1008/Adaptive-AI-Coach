@@ -19,6 +19,7 @@ import {
   Flag,
   X,
   Mic,
+  Square,
 } from 'lucide-react';
 import styles from '@/styles/InterviewView.module.scss';
 
@@ -53,11 +54,17 @@ export default function InterviewView({
   const [wordCount, setWordCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Voice-to-text Dictation States
+  // Voice-to-text Dictation & Audio Waveform States
   const [isRecording, setIsRecording] = useState(false);
   const [recordTime, setRecordTime] = useState(0);
+  const [barHeights, setBarHeights] = useState<number[]>([8, 14, 6, 18, 10, 20, 12, 16, 8, 14, 6, 12]);
+  
   const recognitionRef = useRef<any>(null);
   const timerRef = useRef<any>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const animFrameRef = useRef<number | null>(null);
 
   const QUESTION_LIMIT = 6;
 
@@ -68,7 +75,7 @@ export default function InterviewView({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const startRecording = () => {
+  const startRecording = async () => {
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
@@ -105,6 +112,38 @@ export default function InterviewView({
       timerRef.current = setInterval(() => {
         setRecordTime((prev) => prev + 1);
       }, 1000);
+
+      // Start Web Audio API for real voice volume & frequency detection
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaStreamRef.current = stream;
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        const audioCtx = new AudioCtx();
+        audioCtxRef.current = audioCtx;
+        const source = audioCtx.createMediaStreamSource(stream);
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 64;
+        source.connect(analyser);
+        analyserRef.current = analyser;
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        const updateWave = () => {
+          if (!analyserRef.current) return;
+          analyser.getByteFrequencyData(dataArray);
+          const newHeights: number[] = [];
+          for (let i = 0; i < 12; i++) {
+            const val = dataArray[i * 2] || 0;
+            // Map audio volume (0..255) to dynamic height range (4..24px)
+            const h = Math.max(4, Math.min(24, Math.floor((val / 255) * 24)));
+            newHeights.push(h);
+          }
+          setBarHeights(newHeights);
+          animFrameRef.current = requestAnimationFrame(updateWave);
+        };
+        updateWave();
+      } catch (audioErr) {
+        console.warn('Microphone audio stream notice:', audioErr);
+      }
     } catch (e) {
       console.error('Could not start speech recognition:', e);
     }
@@ -122,16 +161,25 @@ export default function InterviewView({
       } catch (e) {}
       recognitionRef.current = null;
     }
+    if (animFrameRef.current) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+    if (audioCtxRef.current) {
+      try { audioCtxRef.current.close(); } catch (e) {}
+      audioCtxRef.current = null;
+    }
+    if (mediaStreamRef.current) {
+      try {
+        mediaStreamRef.current.getTracks().forEach((t) => t.stop());
+      } catch (e) {}
+      mediaStreamRef.current = null;
+    }
   };
 
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.stop();
-        } catch (e) {}
-      }
+      stopRecording();
     };
   }, []);
 
@@ -332,25 +380,32 @@ export default function InterviewView({
               {isRecording ? (
                 <div
                   className={styles.activeVoiceCapsule}
-                  onClick={stopRecording}
-                  title="Click to stop voice dictation"
+                  title="Recording voice... Click red button to stop"
                 >
                   <div className={styles.capsuleLeft}>
                     <Mic size={18} className={styles.greenMicIcon} />
                     <span className={styles.capsuleTimer}>{formatTime(recordTime)}</span>
                   </div>
+
+                  {/* Real-time Voice Detection Audio Waveform */}
                   <div className={styles.equalizerWave}>
-                    <span className={styles.bar1} />
-                    <span className={styles.bar2} />
-                    <span className={styles.bar3} />
-                    <span className={styles.bar4} />
-                    <span className={styles.bar5} />
-                    <span className={styles.bar6} />
-                    <span className={styles.bar7} />
-                    <span className={styles.bar8} />
-                    <span className={styles.bar9} />
-                    <span className={styles.bar10} />
+                    {barHeights.map((h, i) => (
+                      <span key={i} style={{ height: `${h}px` }} />
+                    ))}
                   </div>
+
+                  {/* Red Stop Button */}
+                  <button
+                    type="button"
+                    className={styles.redStopBtn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      stopRecording();
+                    }}
+                    title="Stop Voice Dictation"
+                  >
+                    <Square size={12} fill="#ffffff" color="#ffffff" />
+                  </button>
                 </div>
               ) : (
                 <button
