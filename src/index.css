@@ -1,0 +1,29 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    @apply bg-slate-950;
+  }
+
+  body {
+    @apply min-h-screen bg-slate-950 text-slate-100 antialiased;
+    background-image:
+      radial-gradient(circle at top, rgba(14, 165, 233, 0.18), transparent 32%),
+      radial-gradient(circle at 85% 15%, rgba(45, 212, 191, 0.12), transparent 28%),
+      linear-gradient(180deg, #020617 0%, #020617 40%, #030712 100%);
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+
+  ::selection {
+    @apply bg-sky-500/30 text-white;
+  }
+}
