@@ -139,3 +139,64 @@ button, input, select, textarea {
 .animate-fade-rise-delay-2 {
   animation: fade-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
 }
+
+/* SVG Line-by-Line Drawing Animations */
+@keyframes drawStroke {
+  from {
+    stroke-dashoffset: 1400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes nodePop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.drawSpeechBubble {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: drawStroke 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.drawLeftHemisphere {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: drawStroke 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+
+.drawRightHemisphere {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: drawStroke 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+}
+
+.drawFissure {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: drawStroke 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.7s forwards;
+}
+
+.drawCircuits {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: drawStroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
+}
+
+.popNodes {
+  opacity: 0;
+  transform-origin: center;
+  animation: nodePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.9s forwards;
+}

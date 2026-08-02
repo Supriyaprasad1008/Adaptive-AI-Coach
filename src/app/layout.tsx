@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import HeaderNav from '@/components/HeaderNav';
 import Footer from '@/components/Footer';
+import PageLoader from '@/components/PageLoader';
 import styles from '@/styles/AppLayout.module.scss';
 import '@/styles/globals.scss';
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <PageLoader />
         <div className={styles.layoutContainer}>
           <HeaderNav />
           <main className={styles.mainContent}>{children}</main>
