@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import os from 'os';
 import { MongoClient, type Collection, type Document, type WithId } from 'mongodb';
 
 export type DatabaseTable = 'interview_sessions' | 'interview_exchanges';
@@ -17,7 +18,7 @@ const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017';
 const dbName = process.env.MONGODB_DB || 'adaptive_ai_coach';
 
 let mongoClientPromise: Promise<MongoClient> | null = null;
-const fallbackStorePromises: Record<string, Promise<FallbackStore>> = {};
+const inMemoryStores: Record<string, FallbackStore> = {};
 
 function getPractitionerKey(practitionerId?: string) {
   const normalized = (practitionerId || 'anonymous').trim().toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/-+/g, '-');
@@ -26,36 +27,48 @@ function getPractitionerKey(practitionerId?: string) {
 
 function getFallbackPath(practitionerId?: string) {
   const key = getPractitionerKey(practitionerId);
-  return path.join(process.cwd(), '.data', `${key}.json`);
+  const baseDir = process.env.VERCEL || process.env.NODE_ENV === 'production'
+    ? path.join(os.tmpdir(), 'adaptive_ai_coach_data')
+    : path.join(process.cwd(), '.data');
+  return path.join(baseDir, `${key}.json`);
 }
 
 async function ensureFallbackStore(practitionerId?: string) {
-  const fallbackPath = getFallbackPath(practitionerId);
-  const cacheKey = fallbackPath;
-  const cached = fallbackStorePromises[cacheKey];
-  if (cached) return cached;
+  const key = getPractitionerKey(practitionerId);
+  if (inMemoryStores[key]) {
+    return inMemoryStores[key];
+  }
 
-  fallbackStorePromises[cacheKey] = (async () => {
+  const fallbackPath = getFallbackPath(practitionerId);
+  try {
+    await fs.mkdir(path.dirname(fallbackPath), { recursive: true });
+    const raw = await fs.readFile(fallbackPath, 'utf8');
+    const store = JSON.parse(raw) as FallbackStore;
+    inMemoryStores[key] = store;
+    return store;
+  } catch {
+    const initial: FallbackStore = { sessions: [], exchanges: [] };
+    inMemoryStores[key] = initial;
     try {
       await fs.mkdir(path.dirname(fallbackPath), { recursive: true });
-      const raw = await fs.readFile(fallbackPath, 'utf8');
-      return JSON.parse(raw) as FallbackStore;
-    } catch {
-      const initial: FallbackStore = { sessions: [], exchanges: [] };
       await fs.writeFile(fallbackPath, JSON.stringify(initial, null, 2), 'utf8');
-      return initial;
+    } catch {
+      // Safe fallback for read-only serverless filesystems
     }
-  })();
-
-  return fallbackStorePromises[cacheKey];
+    return initial;
+  }
 }
 
 async function saveFallbackStore(store: FallbackStore, practitionerId?: string) {
+  const key = getPractitionerKey(practitionerId);
+  inMemoryStores[key] = store;
   const fallbackPath = getFallbackPath(practitionerId);
-  await fs.mkdir(path.dirname(fallbackPath), { recursive: true });
-  await fs.writeFile(fallbackPath, JSON.stringify(store, null, 2), 'utf8');
-  // Invalidate the cached promise so future reads load fresh data from disk
-  delete fallbackStorePromises[fallbackPath];
+  try {
+    await fs.mkdir(path.dirname(fallbackPath), { recursive: true });
+    await fs.writeFile(fallbackPath, JSON.stringify(store, null, 2), 'utf8');
+  } catch {
+    // Memory store remains active if filesystem is read-only
+  }
 }
 
 async function connectMongo() {
