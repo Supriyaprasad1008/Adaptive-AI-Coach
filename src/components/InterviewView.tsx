@@ -53,6 +53,8 @@ export default function InterviewView({
   const [usedQuestionIds, setUsedQuestionIds] = useState<string[]>([]);
   const [wordCount, setWordCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const exchangesRef = useRef<InterviewExchange[]>(exchanges);
+  useEffect(() => { exchangesRef.current = exchanges; }, [exchanges]);
 
   // Voice-to-text Dictation & Audio Waveform States
   const [isRecording, setIsRecording] = useState(false);
@@ -226,9 +228,10 @@ export default function InterviewView({
       setError('Could not load the next question. Please try again.');
       return;
     }
-    onExchangesChange([...exchanges, data as InterviewExchange]);
+    const current = exchangesRef.current;
+    onExchangesChange([...current, data as InterviewExchange]);
     setUsedQuestionIds((prev) => [...prev, q.id]);
-  }, [session.id, exchanges, onExchangesChange]);
+  }, [session.id, onExchangesChange]);
 
   const handleAnswerChange = (value: string) => {
     setAnswer(value);
@@ -243,7 +246,8 @@ export default function InterviewView({
     const evaluation = evaluateAnswer(answer, currentQuestion);
     setLastEvaluation(evaluation);
 
-    const targetExchange = exchanges[exchanges.length - 1];
+    const currentExchanges = exchangesRef.current;
+    const targetExchange = currentExchanges[currentExchanges.length - 1];
     if (!targetExchange) {
       setError('Session state lost. Please restart.');
       setPhase('answering');
@@ -269,7 +273,7 @@ export default function InterviewView({
       return;
     }
 
-    const updated = [...exchanges];
+    const updated = [...currentExchanges];
     updated[updated.length - 1] = data as InterviewExchange;
     onExchangesChange(updated);
     setPhase('feedback');

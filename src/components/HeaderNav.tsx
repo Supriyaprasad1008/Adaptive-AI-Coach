@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserCheck, LogOut } from 'lucide-react';
 import AuthModal from '@/components/AuthModal';
+import { getOrCreatePractitionerId } from '@/lib/supabase';
 import styles from '@/styles/AppLayout.module.scss';
 
 interface UserProfile {
@@ -46,8 +47,10 @@ export default function HeaderNav() {
   }, []);
 
   const handleLoginSuccess = (profile: UserProfile) => {
-    setUser(profile);
-    localStorage.setItem('interview_coach_user', JSON.stringify(profile));
+    const practitionerId = getOrCreatePractitionerId(profile);
+    const profileWithIdentity = { ...profile, practitioner_id: practitionerId };
+    setUser(profileWithIdentity);
+    localStorage.setItem('interview_coach_user', JSON.stringify(profileWithIdentity));
     setIsAuthModalOpen(false);
     router.push('/practice');
   };

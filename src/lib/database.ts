@@ -54,6 +54,8 @@ async function saveFallbackStore(store: FallbackStore, practitionerId?: string) 
   const fallbackPath = getFallbackPath(practitionerId);
   await fs.mkdir(path.dirname(fallbackPath), { recursive: true });
   await fs.writeFile(fallbackPath, JSON.stringify(store, null, 2), 'utf8');
+  // Invalidate the cached promise so future reads load fresh data from disk
+  delete fallbackStorePromises[fallbackPath];
 }
 
 async function connectMongo() {
@@ -171,12 +173,13 @@ export async function updateSession(sessionId: string, values: Record<string, un
   const resolvedPractitionerId = practitionerId || 'anonymous';
   const collection = await getCollection('interview_sessions');
   if (collection) {
+    // MongoDB driver v7+: findOneAndUpdate returns the document directly (not result.value)
     const result = await collection.findOneAndUpdate(
       { id: sessionId, practitioner_id: resolvedPractitionerId },
       { $set: { ...values, practitioner_id: resolvedPractitionerId } },
       { returnDocument: 'after' },
     );
-    return toRecord(result?.value as Record<string, unknown>);
+    return toRecord(result as Record<string, unknown>);
   }
 
   const store = await ensureFallbackStore(resolvedPractitionerId);
@@ -233,12 +236,13 @@ export async function updateExchange(exchangeId: string, values: Record<string, 
   const resolvedPractitionerId = practitionerId || 'anonymous';
   const collection = await getCollection('interview_exchanges');
   if (collection) {
+    // MongoDB driver v7+: findOneAndUpdate returns the document directly (not result.value)
     const result = await collection.findOneAndUpdate(
       { id: exchangeId, practitioner_id: resolvedPractitionerId },
       { $set: { ...values, practitioner_id: resolvedPractitionerId } },
       { returnDocument: 'after' },
     );
-    return toRecord(result?.value as Record<string, unknown>);
+    return toRecord(result as Record<string, unknown>);
   }
 
   const store = await ensureFallbackStore(resolvedPractitionerId);

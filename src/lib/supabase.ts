@@ -7,17 +7,45 @@ type QueryState = {
   limit?: number;
 };
 
-function getCurrentPractitionerId() {
-  if (typeof window === 'undefined') return 'anonymous';
-  try {
-    const raw = window.localStorage.getItem('interview_coach_user');
-    if (!raw) return 'guest-practitioner';
-    const parsed = JSON.parse(raw) as { name?: string; email?: string };
-    const identity = [parsed.name, parsed.email].filter(Boolean).join('|');
-    return identity || 'guest-practitioner';
-  } catch {
-    return 'guest-practitioner';
+function createPractitionerId(profile?: { name?: string; email?: string; practitioner_id?: string }) {
+  if (profile?.practitioner_id) return profile.practitioner_id;
+
+  const email = profile?.email?.trim().toLowerCase();
+  if (email && !email.includes('guest@')) {
+    return `user-${email.replace(/[^a-z0-9]+/g, '-')}`;
   }
+
+  const randomId = globalThis.crypto?.randomUUID?.() || `guest-${Math.random().toString(36).slice(2, 10)}`;
+  return randomId;
+}
+
+export function getOrCreatePractitionerId(profile?: { name?: string; email?: string; practitioner_id?: string }) {
+  if (typeof window === 'undefined') {
+    return createPractitionerId(profile);
+  }
+
+  try {
+    const storageKey = 'interview_coach_user';
+    const raw = window.localStorage.getItem(storageKey);
+    if (raw) {
+      const parsed = JSON.parse(raw) as { name?: string; email?: string; practitioner_id?: string };
+      if (parsed.practitioner_id) return parsed.practitioner_id;
+
+      const nextProfile = { ...parsed, ...profile, practitioner_id: createPractitionerId({ ...parsed, ...profile }) };
+      window.localStorage.setItem(storageKey, JSON.stringify(nextProfile));
+      return nextProfile.practitioner_id;
+    }
+
+    const nextProfile = { ...profile, practitioner_id: createPractitionerId(profile) };
+    window.localStorage.setItem(storageKey, JSON.stringify(nextProfile));
+    return nextProfile.practitioner_id;
+  } catch {
+    return createPractitionerId(profile);
+  }
+}
+
+function getCurrentPractitionerId() {
+  return getOrCreatePractitionerId();
 }
 
 async function requestJson<T>(path: string, init?: RequestInit): Promise<{ data: T | null; error: string | null }> {

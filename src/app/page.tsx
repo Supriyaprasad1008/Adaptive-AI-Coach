@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LandingView from '@/components/LandingView';
 import AuthModal from '@/components/AuthModal';
+import { getOrCreatePractitionerId } from '@/lib/supabase';
 
 export default function Home() {
   const router = useRouter();
@@ -19,7 +20,9 @@ export default function Home() {
   };
 
   const handleLoginSuccess = (profile: { name: string; email: string }) => {
-    localStorage.setItem('interview_coach_user', JSON.stringify(profile));
+    const practitionerId = getOrCreatePractitionerId(profile);
+    const profileWithIdentity = { ...profile, practitioner_id: practitionerId };
+    localStorage.setItem('interview_coach_user', JSON.stringify(profileWithIdentity));
     setIsAuthModalOpen(false);
     router.push('/practice');
   };
