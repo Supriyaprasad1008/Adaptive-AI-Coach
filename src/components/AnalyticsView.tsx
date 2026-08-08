@@ -13,11 +13,8 @@ export default function AnalyticsView() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const { data } = await supabase
-        .from('interview_sessions')
-        .select('*')
-        .order('started_at', { ascending: false });
-      setSessions((data as InterviewSession[]) ?? []);
+      const data = await supabase.from('interview_sessions').select('*');
+      setSessions(((data as { data?: InterviewSession[] }).data ?? []) as InterviewSession[]);
       setLoading(false);
     }
     load();

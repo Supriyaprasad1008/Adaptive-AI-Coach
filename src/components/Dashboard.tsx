@@ -59,13 +59,10 @@ export default function Dashboard({ onStartSession, onViewReport, refreshKey }: 
     let cancelled = false;
     async function load() {
       setLoading(true);
-      const { data } = await supabase
-        .from('interview_sessions')
-        .select('*')
-        .order('started_at', { ascending: false })
-        .limit(20);
+      const data = await supabase.from('interview_sessions').select('*');
+      const sessions = (data as { data?: InterviewSession[] }).data ?? [];
       if (!cancelled) {
-        setSessions((data as InterviewSession[]) ?? []);
+        setSessions(sessions);
         setLoading(false);
       }
     }
